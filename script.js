@@ -1,4 +1,4 @@
-
+let $cost = 0;
 
 
 //focus on name field
@@ -63,7 +63,7 @@ $('input[type = "checkbox"]').change(function(event){
     register('input[name="node"]', 'input[name="js-libs"]');
 
     //code for creating and totaling cost of checkboxes selected
-    let $cost = 0;
+
     const $checkedBoxes = $('input[type = "checkbox"]:checked');
     $cost += $checkedBoxes.length * 100;
     if($('input[name="all"]').is(':checked')){
@@ -134,12 +134,12 @@ const $nameLabel = $('label[for="name"]');
 const $email = $('#mail')
 const $emailLabel = $('label[for="mail"]');
 const $warning = $('<label></label>');
-const $ccNum = $('#cc-Num');
+const $ccNum = $('#cc-num');
 const $zip = $('#zip');
-const $cvv = $('#ccv');
-const $ccNumLabel = $('label[for="ccNum"]');
+const $cvv = $('#cvv');
+const $ccNumLabel = $('label[for="cc-num"]');
 const $zipLabel = $('label[for="zip"]');
-const $cvvLabel = $('label[for="ccv"]');
+const $cvvLabel = $('label[for="cvv"]');
 const error = $("<label></label>")
 $('form').append(error);
 const empty = error.text('fill in empty fields');
@@ -163,12 +163,9 @@ $('button').on('click', function(e){
 
     }
 
-    $('.activities input').each(function(i){
-        if($(this).prop('checked')){
-            $('.activities legend').css({'color': 'red', "font-weight": 'bold'})
-            e.preventDefault();
-        }
-    });
+    if($cost === 0){
+        $('.activities legend').css({'color': 'red', "font-weight": 'bold'})
+    }
 
 
     if($('#payment').val() === 'credit card'){
@@ -202,6 +199,14 @@ $('button').on('click', function(e){
 
 
 
+
+
+
+
+
+
+
+//
 
 
 
