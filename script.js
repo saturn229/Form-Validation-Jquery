@@ -1,6 +1,3 @@
-let $cost = 0;
-
-
 //focus on name field
 $('#name').focus();
 
@@ -16,65 +13,56 @@ $('#title').on('change', function () {
   }
 });
 
+
 //t-shirt functionallity
-$('#color').eq(0).hide();
+$('#color').hide();
+$('#design option').eq(0).hide();
+$('#design').change(function (e) {
+    const $theme = $(this).val();
 
-$('#design option').eq(0).attr('disabled', true)
+    function colors(color1, color2){
+        $('#color').val('');
+        for(let i = 0; i < color1.length; i++){
+            let option1 = "#color option[value = " + color1[i] + "]"
+            $(option1).hide()
+        }
+        for(let y = 0; y < color2.length; y++){
+            let option2 = "#color option[value = " + color2[y] + "]"
+            $(option2).show()
+        }
 
-function themeColor(theme1, theme2){
-    $('#color').val('')
-    for(i = 0; i < theme1.length; i++){
-        let firstTheme = "#color option[value =" + theme1[i]+ "]";
-        $(firstTheme).hide();
-    }
-    for(y = 0; y < theme2.length; y++){
-        let secondTheme = "#color option[value =" + theme2[i]+ "]";
-        $(secondTheme).hide();
-    }
-}
-$('#design').change(function (e){
-    const $design = $(this).val();
-    if($design === 'js puns'){
-        themeColor(['cornflowerblue', 'darkslategrey', 'gold'], ['tomato', 'steelblue', 'dimgrey']);
-        $('#color').show()
-    }
-
-    if($design === 'heart js'){
-        themeColor(['cornflowerblue', 'darkslategrey', 'gold'], ['tomato', 'steelblue', 'dimgrey']);
-        $('#color').show()
+    };
+    if($theme !== 'Select Theme'){
+        if($theme === 'js puns'){
+            colors(["tomato", "steelblue", "dimgrey"], ["cornflowerblue", "darkslategrey", "gold"])
+            $('#color').show();
+        } else if ($theme === 'heart js'){
+            colors(["cornflowerblue", "darkslategrey", "gold"], ["tomato", "steelblue", "dimgrey"])
+            $('#color').show();
+        }
     }
 });
 
+
+
 //event listener for check box functions
-$('input[type = "checkbox"]').change(function(event){
-    function register(box1, box2){
-        if($(box1).is(':checked')){
-            $(box2).attr('disabled', true);
-        } else {
-            $(box2).attr('disabled', false);
-        }
-    };
+let totalCost = 0;
+const $div = $("<div id='totalCost'> Total Cost: "+ totalCost +" </div>");
+const $fieldSet = $('fieldset').eq(2);
+$fieldSet.append($div);
+$div.hide();
 
-
-
-    register('input[name="js-frameworks"]', 'input[name="express"]');
-    register('input[name="express"]', 'input[name="js-frameworks"]');
-    register('input[name="js-libs"]', 'input[name="node"]');
-    register('input[name="node"]', 'input[name="js-libs"]');
-
-    //code for creating and totaling cost of checkboxes selected
-
-    const $checkedBoxes = $('input[type = "checkbox"]:checked');
-    $cost += $checkedBoxes.length * 100;
-    if($('input[name="all"]').is(':checked')){
-        $cost += 100;
+$('input[type="checkbox"]').change(function(e){
+    let $box = $(this);
+    let $cost = parseInt($(this).attr("data-cost"));
+    if($box.is(":checked")){
+        totalCost += $cost;
     }
+    $div.show();
 
-    //look over this
-    $('#totalCost').remove();
-    const elem = "<div id='totalCost'>Total Cost: $" + $cost + "</div>"
-    const $fieldSet = $('fieldset').eq(2);
-    $fieldSet.append(elem);
+
+    console.log(totalCost);
+    let $dateTime = $(this).attr("data-day-and-time");
 
 
 });
@@ -128,7 +116,6 @@ $('#payment').on('change', function (){
 //************************************
 //form validation
 //************************************
-
 const $name = $('#name');
 const $nameLabel = $('label[for="name"]');
 const $email = $('#mail')
@@ -140,78 +127,19 @@ const $cvv = $('#cvv');
 const $ccNumLabel = $('label[for="cc-num"]');
 const $zipLabel = $('label[for="zip"]');
 const $cvvLabel = $('label[for="cvv"]');
-const error = $("<label></label>")
-$('form').append(error);
-const empty = error.text('fill in empty fields');
-empty.hide()
 
-
-
-$('button').on('click', function(e){
-    if($name.val() === ""){
-        $nameLabel.css({"color": "red"});
-        $name.css({"borderColor": "red"});
-        e.preventDefault();
-
-
+//Name field can't be blank.
+function nameValidation(){
+    const nameValue = $name.value
+    if(/^[a-zA-Z]+$/.test(nameValue)){
+        return true;
+    } else {
+        return false;
     }
-
-    if ($email.val() === ''){
-        $emailLabel.css({"color": "red"});
-        $email.css({"borderColor": "red"});
-        e.preventDefault();
-
-    }
-
-    if($cost === 0){
-        $('.activities legend').css({'color': 'red', "font-weight": 'bold'})
-    }
-
-
-    if($('#payment').val() === 'credit card'){
-        if ($ccNum.val() === ''){
-            $ccNumLabel.css({"color": "red"});
-            $ccNum.css({"borderColor": "red"});
-            e.preventDefault();
-        }
-        if ($zip.val() === ''){
-            $zipLabel.css({"color": "red"});
-            $zip.css({"borderColor": "red"});
-            e.preventDefault();
-            empty.show()
-        }
-        if ($cvv.val() === ''){
-            $cvvLabel.css({"color": "red"});
-            $cvv.css({"borderColor": "red"});
-            e.preventDefault();
-        }
-    }
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-
-
-
-
-
-
-
-//
+}
+//Email field must be a validly formatted e-mail address (you don't have to check that it's a real e-mail address, just that it's formatted like one: dave@teamtreehouse.com for example.
+//User must select at least one checkbox under the "Register for Activities" section of the form.
+//If the selected payment option is "Credit Card," make sure the user has supplied a Credit Card number, a Zip Code, and a 3 number CVV value before the form can be submitted.
+//Credit Card field should only accept a number between 13 and 16 digits.
+//The Zip Code field should accept a 5-digit number.
+//The CVV should only accept a number that is exactly 3 digits long.
