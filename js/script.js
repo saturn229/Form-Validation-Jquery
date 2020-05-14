@@ -16,7 +16,7 @@ $('#title').on('change', function () {
 
 //t-shirt functionallity
 $('#color').hide();
-$('#design option').eq(0).hide();
+$('#design option').eq(0).attr('disabled', true);
 $('#design').change(function (e) {
     const $theme = $(this).val();
 
@@ -57,15 +57,38 @@ $('input[type="checkbox"]').change(function(e){
     let $cost = parseInt($(this).attr("data-cost"));
     if($box.is(":checked")){
         totalCost += $cost;
+        $div.html("Total Cost: " + totalCost)
+    } else if ($box.prop('checked', false)){
+        totalCost -= $cost;
+        $div.html("Total Cost: " + totalCost)
     }
     $div.show();
 
 
-    console.log(totalCost);
     let $dateTime = $(this).attr("data-day-and-time");
+    // 1. In the change event for the activities section loop through the check boxes.
+    for(let i = 0; i < $('input[type="checkbox"]').length; i++){
+        // 2. grab the current checkbox that is being checked in the loop in a variable.
+        let $checkbox = $('input[type="checkbox"]')[i];
+        // 3. grab the current checkbox day and time attribute and save in a variable.
+        let $currentDateTime = $checkbox.getAttribute("data-day-and-time");
+        // 4. In an if statement check the current check box day and time and compare it to the clicked checkbox day and time.
+        // 5. If current day and time and clicked day and time are the same AND if the current checkbox is not clicked -
+        //    set the disabled property of the current check box to true. ELSE set it to false.
+        if($currentDateTime === $dateTime && $checkbox.checked == false){
+            $checkbox.disabled = true;
+        } else {
+            $checkbox.disabled = false;
+        }
+
+    }
+
+
+
 
 
 });
+
 
 
 
@@ -137,6 +160,8 @@ function nameValidation(){
         return false;
     }
 }
+
+
 //Email field must be a validly formatted e-mail address (you don't have to check that it's a real e-mail address, just that it's formatted like one: dave@teamtreehouse.com for example.
 //User must select at least one checkbox under the "Register for Activities" section of the form.
 //If the selected payment option is "Credit Card," make sure the user has supplied a Credit Card number, a Zip Code, and a 3 number CVV value before the form can be submitted.
