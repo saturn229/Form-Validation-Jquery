@@ -47,6 +47,7 @@ $('#design').change(function (e) {
 
 //event listener for check box functions
 let totalCost = 0;
+let $input = $('input[type="checkbox"]');
 const $div = $("<div id='totalCost'> Total Cost: "+ totalCost +" </div>");
 const $fieldSet = $('fieldset').eq(2);
 $fieldSet.append($div);
@@ -58,7 +59,7 @@ $('input[type="checkbox"]').change(function(e){
     if($box.is(":checked")){
         totalCost += $cost;
         $div.html("Total Cost: " + totalCost)
-    } else if ($box.prop('checked', false)){
+    } else if ($box.is(':checked') === false){
         totalCost -= $cost;
         $div.html("Total Cost: " + totalCost)
     }
@@ -66,27 +67,21 @@ $('input[type="checkbox"]').change(function(e){
 
 
     let $dateTime = $(this).attr("data-day-and-time");
-    // 1. In the change event for the activities section loop through the check boxes.
-    for(let i = 0; i < $('input[type="checkbox"]').length; i++){
-        // 2. grab the current checkbox that is being checked in the loop in a variable.
+
+    for(let i = 0; i < $input.length; i++){
+
         let $checkbox = $('input[type="checkbox"]')[i];
-        // 3. grab the current checkbox day and time attribute and save in a variable.
         let $currentDateTime = $checkbox.getAttribute("data-day-and-time");
-        // 4. In an if statement check the current check box day and time and compare it to the clicked checkbox day and time.
-        // 5. If current day and time and clicked day and time are the same AND if the current checkbox is not clicked -
-        //    set the disabled property of the current check box to true. ELSE set it to false.
-        if($currentDateTime === $dateTime && $checkbox.checked == false){
+
+        if($dateTime === $currentDateTime && $checkbox !== this){
             $checkbox.disabled = true;
         } else {
             $checkbox.disabled = false;
         }
 
+
+
     }
-
-
-
-
-
 });
 
 
@@ -102,11 +97,11 @@ $('#paypal').hide();
 $('#bitcoin').hide();
 
 //event listener for payment options selections
-$('#payment').on('change', function (){
+$('#payment').change(function (e){
     let selected = $(this).val();
 
 
-    //if statemnet for which payment method to display
+    //if statement for which payment method to display
     if (selected === 'credit card'){
         $('#credit-card').show();
         $('#paypal').hide();
@@ -150,21 +145,83 @@ const $cvv = $('#cvv');
 const $ccNumLabel = $('label[for="cc-num"]');
 const $zipLabel = $('label[for="zip"]');
 const $cvvLabel = $('label[for="cvv"]');
+const payment = $('.payment')
 
 //Name field can't be blank.
 function nameValidation(){
-    const nameValue = $name.value
+    const nameValue = $name.val();
     if(/^[a-zA-Z]+$/.test(nameValue)){
+        $name.css("border", "2px solid rgb(111, 157, 220)");
         return true;
     } else {
+        $name.css("border-color", "red");
+        return false;
+    }
+}
+// Email field must be a validly formatted e-mail address (you don't have to check that it's a real e-mail address, just that it's formatted like one: dave@teamtreehouse.com for example.
+function emailValidation(){
+    const emailValue = $email.val();
+    if (/^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue)){
+        $email.css("border", "2px solid rgb(111, 157, 220)");
+        return true;
+    } else {
+        $email.css("border-color", "red");
         return false;
     }
 }
 
-
-//Email field must be a validly formatted e-mail address (you don't have to check that it's a real e-mail address, just that it's formatted like one: dave@teamtreehouse.com for example.
 //User must select at least one checkbox under the "Register for Activities" section of the form.
-//If the selected payment option is "Credit Card," make sure the user has supplied a Credit Card number, a Zip Code, and a 3 number CVV value before the form can be submitted.
-//Credit Card field should only accept a number between 13 and 16 digits.
+function activityValidation(){
+    const validActivities = totalCost > 0;
+    if(!validActivities){
+
+    }
+    return validActivities;
+
+}
+// If the selected payment option is "Credit Card," make sure the user has supplied a Credit Card number, a Zip Code, and a 3 number CVV value before the form can be submitted.
+// Credit Card field should only accept a number between 13 and 16 digits.
+
+//figure out how to show that credit card is selected
+
+function ccNumValidation(){
+    const ccNumValue = $ccNum.val();
+    if (/^(\d {4} [- ]) {3}\d {4}|\d {16}$/.test(ccNumValue)){
+        $ccNum.css("border", "2px solid rgb(111, 157, 220)");
+        return true;
+    } else {
+        $ccNum.css("border-color", "red");
+        return false;
+    }
+}
+
 //The Zip Code field should accept a 5-digit number.
+function zipValidation(){
+    const zipValue = $zip.val();
+    if (/[0-9]{5}/.test(zipValue)){
+        $zip.css("border", "2px solid rgb(111, 157, 220)");
+        return true;
+    } else {
+        $zip.css("border-color", "red");
+        return false;
+    }
+}
+
 //The CVV should only accept a number that is exactly 3 digits long.
+function cvvValidation(){
+    const cvvValue = $cvv.val();
+    if (/[0-9]{3}/.test(cvvValue)){
+        $cvv.css("border", "2px solid rgb(111, 157, 220)");
+        return true;
+    } else {
+        $cvv.css("border-color", "red");
+        return false;
+    }
+}
+$(document).submit(function (e){
+    if(nameValidation(), emailValidation(), activityValidation(), ccNumValidation(), zipValidation(), cvvValidation()){
+        console.log(":)");
+    } else {
+        e.preventDefault();
+    }
+});
