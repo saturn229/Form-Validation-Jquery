@@ -56,6 +56,7 @@ $div.hide();
 $('input[type="checkbox"]').change(function(e){
     let $box = $(this);
     let $cost = parseInt($(this).attr("data-cost"));
+    const checkboxes = $('input[type="checkbox"]')
     if($box.is(":checked")){
         totalCost += $cost;
         $div.html("Total Cost: " + totalCost)
@@ -67,17 +68,18 @@ $('input[type="checkbox"]').change(function(e){
 
 
     let $dateTime = $(this).attr("data-day-and-time");
+    const clicked = e.target;
 
     for(let i = 0; i < $input.length; i++){
 
         let $checkbox = $('input[type="checkbox"]')[i];
         let $currentDateTime = $checkbox.getAttribute("data-day-and-time");
-
         if($dateTime === $currentDateTime && $checkbox !== this){
-            $checkbox.disabled = true;
-        } else {
-            $checkbox.disabled = false;
-        }
+            if(clicked.checked)
+                $input[i].disabled = true;
+            } else {
+                $input[i].disabled = false;
+            }
 
 
 
@@ -172,11 +174,12 @@ function emailValidation(){
 
 //User must select at least one checkbox under the "Register for Activities" section of the form.
 function activityValidation(){
-    const validActivities = totalCost > 0;
-    if(!validActivities){
-
+    if(totalCost === 0){
+        return false;
+    } else {
+        return true;
     }
-    return validActivities;
+
 
 }
 // If the selected payment option is "Credit Card," make sure the user has supplied a Credit Card number, a Zip Code, and a 3 number CVV value before the form can be submitted.
@@ -206,6 +209,25 @@ function zipValidation(){
         return false;
     }
 }
+
+//The CVV should only accept a number that is exactly 3 digits long.
+function cvvValidation(){
+    const cvvValue = $cvv.val();
+    if (/[0-9]{3}/.test(cvvValue)){
+        $cvv.css("border", "2px solid rgb(111, 157, 220)");
+        return true;
+    } else {
+        $cvv.css("border-color", "red");
+        return false;
+    }
+}
+$(document).submit(function (e){
+    if(nameValidation(), emailValidation(), activityValidation(), ccNumValidation(), zipValidation(), cvvValidation()){
+        console.log(":)");
+    } else {
+        e.preventDefault();
+    }
+});
 
 //The CVV should only accept a number that is exactly 3 digits long.
 function cvvValidation(){
