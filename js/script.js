@@ -68,18 +68,19 @@ $('input[type="checkbox"]').change(function(e){
 
 
     let $dateTime = $(this).attr("data-day-and-time");
-    const clicked = e.target;
+
 
     for(let i = 0; i < $input.length; i++){
 
         let $checkbox = $('input[type="checkbox"]')[i];
         let $currentDateTime = $checkbox.getAttribute("data-day-and-time");
         if($dateTime === $currentDateTime && $checkbox !== this){
-            if(clicked.checked)
-                $input[i].disabled = true;
-            } else {
-                $input[i].disabled = false;
-            }
+            $checkbox.disabled = true;
+        }
+
+        if ($box.is(":checked") === false){
+            $checkbox.disabled = false;
+        }
 
 
 
@@ -189,7 +190,7 @@ function activityValidation(){
 
 function ccNumValidation(){
     const ccNumValue = $ccNum.val();
-    if (/^(\d {4} [- ]) {3}\d {4}|\d {16}$/.test(ccNumValue)){
+    if (/^\d{13,16}$/.test(ccNumValue)){
         $ccNum.css("border", "2px solid rgb(111, 157, 220)");
         return true;
     } else {
@@ -227,23 +228,6 @@ $(document).submit(function (e){
     } else {
         e.preventDefault();
     }
-});
 
-//The CVV should only accept a number that is exactly 3 digits long.
-function cvvValidation(){
-    const cvvValue = $cvv.val();
-    if (/[0-9]{3}/.test(cvvValue)){
-        $cvv.css("border", "2px solid rgb(111, 157, 220)");
-        return true;
-    } else {
-        $cvv.css("border-color", "red");
-        return false;
-    }
-}
-$(document).submit(function (e){
-    if(nameValidation(), emailValidation(), activityValidation(), ccNumValidation(), zipValidation(), cvvValidation()){
-        console.log(":)");
-    } else {
-        e.preventDefault();
-    }
+
 });
