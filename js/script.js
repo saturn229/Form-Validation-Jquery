@@ -153,7 +153,7 @@ const payment = $('.payment')
 //Name field can't be blank.
 function nameValidation(){
     const nameValue = $name.val();
-    if(/^[a-zA-Z]+$/.test(nameValue)){
+    if(/^[a-zA-Z ]{2,30}$/.test(nameValue)){
         $name.css("border", "2px solid rgb(111, 157, 220)");
         return true;
     } else {
@@ -223,11 +223,18 @@ function cvvValidation(){
     }
 }
 $(document).submit(function (e){
-    if(nameValidation(), emailValidation(), activityValidation(), ccNumValidation(), zipValidation(), cvvValidation()){
-        console.log(":)");
-    } else {
-        e.preventDefault();
-    }
+  if(payment === 'credit card' ){
+      if(nameValidation(), emailValidation(), activityValidation(), ccNumValidation(), zipValidation(), cvvValidation()){
+          console.log(":)");
+      } else {
+          e.preventDefault();
+      }
+  } else {
+      if(nameValidation(), emailValidation(), activityValidation()){
+          console.log(":)");
+      } else {
+          e.preventDefault();
+  }
 
 
 });
