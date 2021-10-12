@@ -141,14 +141,14 @@ const $name = $('#name');
 const $nameLabel = $('label[for="name"]');
 const $email = $('#mail')
 const $emailLabel = $('label[for="mail"]');
-const $warning = $('<label></label>');
 const $ccNum = $('#cc-num');
 const $zip = $('#zip');
 const $cvv = $('#cvv');
 const $ccNumLabel = $('label[for="cc-num"]');
 const $zipLabel = $('label[for="zip"]');
 const $cvvLabel = $('label[for="cvv"]');
-const payment = $('.payment')
+const $payment = $('#payment').val()
+const $activites = $('.actTitle');
 
 //Name field can't be blank.
 function nameValidation(){
@@ -176,8 +176,11 @@ function emailValidation(){
 //User must select at least one checkbox under the "Register for Activities" section of the form.
 function activityValidation(){
     if(totalCost === 0){
+        console.log('a');
+        $activites.css("color", "red");
         return false;
     } else {
+        console.log('b');
         return true;
     }
 
@@ -187,54 +190,61 @@ function activityValidation(){
 // Credit Card field should only accept a number between 13 and 16 digits.
 
 //figure out how to show that credit card is selected
+if (payment === 'credit card'){
+  function ccNumValidation(){
+      const ccNumValue = $ccNum.val();
+      if (/^\d{13,16}$/.test(ccNumValue)){
+          $ccNum.css("border", "2px solid rgb(111, 157, 220)");
+          return true;
+      } else {
+          $ccNum.css("border-color", "red");
+          return false;
+      }
+  }
 
-function ccNumValidation(){
-    const ccNumValue = $ccNum.val();
-    if (/^\d{13,16}$/.test(ccNumValue)){
-        $ccNum.css("border", "2px solid rgb(111, 157, 220)");
-        return true;
-    } else {
-        $ccNum.css("border-color", "red");
-        return false;
-    }
+  //The Zip Code field should accept a 5-digit number.
+  function zipValidation(){
+      const zipValue = $zip.val();
+      if (/[0-9]{5}/.test(zipValue)){
+          $zip.css("border", "2px solid rgb(111, 157, 220)");
+
+          return true;
+      } else {
+          $zip.css("border-color", "red");
+          return false;
+      }
+  }
+
+  //The CVV should only accept a number that is exactly 3 digits long.
+  function cvvValidation(){
+      const cvvValue = $cvv.val();
+      if (/[0-9]{3}/.test(cvvValue)){
+          $cvv.css("border", "2px solid rgb(111, 157, 220)");
+          return true;
+      } else {
+          $cvv.css("border-color", "red");
+          return false;
+      }
+  }
 }
 
-//The Zip Code field should accept a 5-digit number.
-function zipValidation(){
-    const zipValue = $zip.val();
-    if (/[0-9]{5}/.test(zipValue)){
-        $zip.css("border", "2px solid rgb(111, 157, 220)");
-        return true;
-    } else {
-        $zip.css("border-color", "red");
-        return false;
-    }
-}
 
-//The CVV should only accept a number that is exactly 3 digits long.
-function cvvValidation(){
-    const cvvValue = $cvv.val();
-    if (/[0-9]{3}/.test(cvvValue)){
-        $cvv.css("border", "2px solid rgb(111, 157, 220)");
-        return true;
-    } else {
-        $cvv.css("border-color", "red");
-        return false;
-    }
-}
+
 $(document).submit(function (e){
+
   if(payment === 'credit card' ){
       if(nameValidation(), emailValidation(), activityValidation(), ccNumValidation(), zipValidation(), cvvValidation()){
-          console.log(":)");
+          console.log("A");
       } else {
-          e.preventDefault();
+        e.preventDefault();
       }
   } else {
       if(nameValidation(), emailValidation(), activityValidation()){
-          console.log(":)");
+          console.log("B");
       } else {
-          e.preventDefault();
-  }
+        e.preventDefault();
+      }
+    }
 
 
 });
