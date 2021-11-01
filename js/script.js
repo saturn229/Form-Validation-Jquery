@@ -233,13 +233,13 @@ function cvvValidation(){
 
 $(document).submit(function (e){
   if($('#payment').val() === "credit card"){
-    if(nameValidation() && emailValidation() && activityValidation() && ccNumValidation() && zipValidation() && cvvValidation()){
+    if(nameValidation() & emailValidation() & activityValidation() & ccNumValidation() & zipValidation() & cvvValidation()){
         console.log("A");
     } else {
       e.preventDefault();
     }
   } else {
-    if(nameValidation() && emailValidation() && activityValidation()){
+    if(nameValidation() && emailValidation() & activityValidation()){
       console.log("B")
     } else {
       e.preventDefault();
