@@ -147,7 +147,7 @@ const $cvv = $('#cvv');
 const $ccNumLabel = $('label[for="cc-num"]');
 const $zipLabel = $('label[for="zip"]');
 const $cvvLabel = $('label[for="cvv"]');
-const $payment = $('#payment').val()
+const $payment = $('#payment').val();
 const $activites = $('.actTitle');
 
 //Name field can't be blank.
@@ -180,6 +180,7 @@ function activityValidation(){
         $activites.css("color", "red");
         return false;
     } else {
+        $activites.css("color", "#063144E6");
         console.log('b');
         return true;
     }
@@ -190,61 +191,62 @@ function activityValidation(){
 // Credit Card field should only accept a number between 13 and 16 digits.
 
 //figure out how to show that credit card is selected
-if (payment === 'credit card'){
-  function ccNumValidation(){
-      const ccNumValue = $ccNum.val();
-      if (/^\d{13,16}$/.test(ccNumValue)){
-          $ccNum.css("border", "2px solid rgb(111, 157, 220)");
-          return true;
-      } else {
-          $ccNum.css("border-color", "red");
-          return false;
-      }
-  }
 
-  //The Zip Code field should accept a 5-digit number.
-  function zipValidation(){
-      const zipValue = $zip.val();
-      if (/[0-9]{5}/.test(zipValue)){
-          $zip.css("border", "2px solid rgb(111, 157, 220)");
+function ccNumValidation(){
+    const ccNumValue = $ccNum.val();
+    if (/^\d{13,16}$/.test(ccNumValue)){
+        $ccNum.css("border", "2px solid rgb(111, 157, 220)");
+        return true;
+    } else {
+        $ccNum.css("border-color", "red");
+        return false;
+    }
+}
 
-          return true;
-      } else {
-          $zip.css("border-color", "red");
-          return false;
-      }
-  }
+//The Zip Code field should accept a 5-digit number.
+function zipValidation(){
+    const zipValue = $zip.val();
+    if (/[0-9]{5}/.test(zipValue)){
+        $zip.css("border", "2px solid rgb(111, 157, 220)");
 
-  //The CVV should only accept a number that is exactly 3 digits long.
-  function cvvValidation(){
-      const cvvValue = $cvv.val();
-      if (/[0-9]{3}/.test(cvvValue)){
-          $cvv.css("border", "2px solid rgb(111, 157, 220)");
-          return true;
-      } else {
-          $cvv.css("border-color", "red");
-          return false;
-      }
-  }
+        return true;
+    } else {
+        $zip.css("border-color", "red");
+        return false;
+    }
+}
+
+//The CVV should only accept a number that is exactly 3 digits long.
+function cvvValidation(){
+    const cvvValue = $cvv.val();
+    if (/[0-9]{3}/.test(cvvValue)){
+        $cvv.css("border", "2px solid rgb(111, 157, 220)");
+        return true;
+    } else {
+        $cvv.css("border-color", "red");
+        return false;
+    }
 }
 
 
 
-$(document).submit(function (e){
 
-  if(payment === 'credit card' ){
-      if(nameValidation(), emailValidation(), activityValidation(), ccNumValidation(), zipValidation(), cvvValidation()){
-          console.log("A");
-      } else {
-        e.preventDefault();
-      }
-  } else {
-      if(nameValidation(), emailValidation(), activityValidation()){
-          console.log("B");
-      } else {
-        e.preventDefault();
-      }
+$(document).submit(function (e){
+  if($('#payment').val() === "credit card"){
+    if(nameValidation() && emailValidation() && activityValidation() && ccNumValidation() && zipValidation() && cvvValidation()){
+        console.log("A");
+    } else {
+      e.preventDefault();
     }
+  } else {
+    if(nameValidation() && emailValidation() && activityValidation()){
+      console.log("B")
+    } else {
+      e.preventDefault();
+    }
+  }
+
 
 
 });
+
