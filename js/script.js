@@ -148,7 +148,7 @@ const $ccNumLabel = $('label[for="cc-num"]');
 const $zipLabel = $('label[for="zip"]');
 const $cvvLabel = $('label[for="cvv"]');
 const $payment = $('#payment').val();
-const $activites = $('.actTitle');
+const $activites = $('.activities legend');
 
 //Name field can't be blank.
 function nameValidation(){
@@ -178,9 +178,11 @@ function activityValidation(){
     if(totalCost === 0){
         console.log('a');
         $activites.css("color", "red");
+        $('.actTitle').append('<h5 class=actVal>Please select an Activity</h5>');
         return false;
     } else {
         $activites.css("color", "#063144E6");
+        $('.actVal').hide();
         console.log('b');
         return true;
     }
